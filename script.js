@@ -1,31 +1,64 @@
-const images = document.querySelectorAll('.slider-img');
-const controlls = document.querySelectorAll('.controlls');
-let imageIndex = 0;
+const arrowLeft = document.querySelector(".arrow-left");
+const arrowRight = document.querySelector(".arrow-right");
+const slides = document.querySelectorAll(".slider-item");
+const bottom = document.getElementById("bottom");
 
-function show(index) {
-    images[imageIndex].classList.remove('active');
-    images[index].classList.add('active');
-    imageIndex = index;
+let currentSlideIndex = 0;
+const paginationCircles = [];
+
+function createPaginationCircle() {
+    const div = document.createElement("div");
+    div.className = "pagination-circle";
+    bottom.appendChild(div);
+    paginationCircles.push(div);
 }
 
-controlls.forEach((e) => {
-    e.addEventListener('click', (event) => {
-        if (event.target.classList.contains('prev')) {
-            let index = imageIndex - 1;
+function addPagination() {
+    slides.forEach(createPaginationCircle);
+    paginationCircles[0].classList.add("active");
+}
 
-            if (index < 0) {
-                index = images.length - 1;
-            }
+function addActiveClass() {
+    paginationCircles[currentSlideIndex].classList.add("active");
+}
 
-            show(index);
-        } else if (event.target.classList.contains('next')) {
-            let index = imageIndex + 1;
-            if (index >= images.length) {
-                index = 0;
-            }
-            show(index);
-        }
-    });
-});
+function removeActiveClass() {
+    paginationCircles[currentSlideIndex].classList.remove("active");
+}
 
-show(imageIndex);
+function showSlide() {
+    slides[currentSlideIndex].classList.add("block");
+}
+
+function hideSlide() {
+    slides[currentSlideIndex].classList.remove("block");
+}
+
+function nextSlide() {
+    hideSlide();
+    removeActiveClass();
+    currentSlideIndex++;
+    if (currentSlideIndex > slides.length - 1) {
+        currentSlideIndex = 0;
+    }
+    addActiveClass();
+    showSlide();
+}
+
+function prevSlide() {
+    hideSlide();
+    removeActiveClass();
+    currentSlideIndex--;
+    if (currentSlideIndex < 0) {
+        currentSlideIndex = slides.length - 1;
+    }
+    addActiveClass();
+    showSlide();
+}
+
+arrowRight.addEventListener("click", nextSlide);
+arrowLeft.addEventListener("click", prevSlide);
+
+addPagination();
+showSlide();
+addActiveClass();
