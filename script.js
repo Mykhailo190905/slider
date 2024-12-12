@@ -16,6 +16,17 @@ function createPaginationCircle() {
 function addPagination() {
     slides.forEach(createPaginationCircle);
     paginationCircles[0].classList.add("active");
+    paginationCircles.forEach((circle, index) => {
+        circle.addEventListener("click", () => changeSlide(index));
+    });
+}
+
+function changeSlide(index) {
+    hideSlide();
+    removeActiveClass();
+    currentSlideIndex = index;
+    addActiveClass();
+    showSlide();
 }
 
 function addActiveClass() {
